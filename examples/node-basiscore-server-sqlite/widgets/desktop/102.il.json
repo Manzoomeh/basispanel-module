@@ -1,0 +1,58 @@
+{
+  "$type": "group",
+  "core": "group",
+  "name": "notes_summary",
+  "Commands": [
+    {
+      "$type": "rawtext",
+      "core": "rawtext",
+      "content": "<link rel=\"stylesheet\" href=\"[##module.stylesheet##]\"/>\n<div id=\"notesSummaryWidget\" class=\"notes-widget\" dir=\"[##module.dir##]\" lang=\"[##module.culture##]\">\n  <h3 class=\"notes-widget__title\">[##t.summary.title##]</h3>\n  <dl class=\"notes-summary\" data-role=\"summary\">"
+    },
+    {
+      "$type": "dbsource",
+      "core": "dbsource",
+      "name": "db",
+      "ConnectionName": "notes",
+      "Params": [
+        {
+          "name": "query",
+          "value": "summary"
+        }
+      ],
+      "Members": [
+        {
+          "name": "summary"
+        }
+      ]
+    },
+    {
+      "$type": "print",
+      "core": "print",
+      "name": "summary_print",
+      "data-member-name": "db.summary",
+      "layout-content": "@child",
+      "faces": [
+        {
+          "content": "<dt>[##t.summary.count##]</dt><dd data-role=\"count\">@count</dd><dt>[##t.summary.latest##]</dt><dd data-role=\"latest\">@latest</dd>"
+        }
+      ]
+    },
+    {
+      "$type": "rawtext",
+      "core": "rawtext",
+      "content": [
+        "</dl>\n</div>\n<script>\n  // Rendered on the server by the BasisCore render engine (dbsource + print).\n  window.NOTES_SUMMARY_BUILD = 'notes-node-sqlite 1.0.0';\n  (function () {\n    var roots = document.querySelectorAll('#notesSummaryWidget');\n    for (var i = 0; i < roots.length - 1; i++) { try { roots[i].remove(); } catch (e) {} }\n    var root = roots[roots.length - 1];\n    if (!root) { return; }\n    var url = '[##module.baseurl##]/",
+        {
+          "Params": [
+            {
+              "Source": "cms",
+              "Member": "cms",
+              "Column": "rkey"
+            }
+          ]
+        },
+        "/[##module.culture##]/Desktop/widget/102';\n    // Re-render on the server when another widget reports a change, and swap in the new values.\n    function refresh() {\n      if (!document.body.contains(root)) { return; }\n      fetch(url).then(function (response) { return response.text(); }).then(function (text) {\n        var fresh = new DOMParser().parseFromString(text, 'text/html').querySelector('[data-role=\"summary\"]');\n        var current = root.querySelector('[data-role=\"summary\"]');\n        if (fresh && current) { current.innerHTML = fresh.innerHTML; }\n      }).catch(function () {});\n    }\n    if (window.__notesSummaryListener) {\n      window.removeEventListener('notes:changed', window.__notesSummaryListener);\n    }\n    window.__notesSummaryListener = refresh;\n    window.addEventListener('notes:changed', refresh);\n  })();\n</script>\n"
+      ]
+    }
+  ]
+}

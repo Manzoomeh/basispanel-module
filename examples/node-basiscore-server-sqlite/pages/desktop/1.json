@@ -1,0 +1,33 @@
+{
+  "container": "container",
+  "title": "[##t.page.notes##]",
+  "customizable": true,
+  "groups": [
+    {
+      "groupname": "notes_main",
+      "options": {},
+      "widgets": [
+        {
+          "id": 101,
+          "title": "[##t.widget.list##]",
+          "name": "",
+          "moduleid": "[##mid##]",
+          "isPrimary": true,
+          "x": 0, "y": 0, "w": 8, "h": 12,
+          "container": "container",
+          "widgetName": "Notes_List"
+        },
+        {
+          "id": 102,
+          "title": "[##t.widget.summary##]",
+          "name": "",
+          "moduleid": "[##mid##]",
+          "isPrimary": false,
+          "x": 8, "y": 0, "w": 4, "h": 6,
+          "container": "container",
+          "widgetName": "Notes_Summary"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Module shell simulator</title>
+  <!-- Local development only. This page imitates what the BasisPanel shell does with a module:
+       fetch the menu, open a page, fetch each widget and inject it (scripts included). -->
+  <style>
+    :root { color-scheme: light dark; font: 14px/1.5 system-ui, "Segoe UI", Tahoma, sans-serif; }
+    body { margin: 0; display: grid; grid-template-columns: 240px minmax(0, 1fr); grid-template-rows: auto 1fr; min-height: 100vh; }
+    header { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+             padding: 8px 16px; border-bottom: 1px solid #8884; }
+    header strong { margin-inline-end: auto; }
+    nav { padding: 12px; border-inline-end: 1px solid #8884; }
+    nav a { display: block; padding: 4px 8px; cursor: pointer; border-radius: 4px; }
+    nav a:hover { background: #8882; }
+    nav .group { font-weight: 600; margin-block-start: 8px; }
+    main { padding: 16px; }
+    .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
+    .log { font: 12px monospace; white-space: pre-wrap; opacity: .7; margin-block-start: 16px; }
+    @media (max-width: 700px) { body { grid-template-columns: 1fr; } .grid > * { grid-column: 1 / -1 !important; } }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>BasisPanel shell simulator</strong>
+    <label>rkey <input id="rkey" value="dev" size="10"/></label>
+    <label>culture
+      <select id="culture"><option>en</option><option>fa</option></select>
+    </label>
+    <button id="reload" type="button">Load menu</button>
+  </header>
+  <nav id="menu"></nav>
+  <main>
+    <div id="page" class="grid"></div>
+    <div id="log" class="log"></div>
+  </main>
+  <script>
+    var BASE = '[##module.baseurl##]';
+    var DEVICE = 'Desktop';
+
+    function log(line) { document.getElementById('log').textContent += line + '\n'; }
+    function prefix() {
+      return BASE + '/' + document.getElementById('rkey').value + '/' +
+        document.getElementById('culture').value + '/' + DEVICE;
+    }
+
+    // Inject HTML and execute its scripts, the way the shell does.
+    function inject(host, html) {
+      host.innerHTML = html;
+      host.querySelectorAll('script').forEach(function (old) {
+        var s = document.createElement('script');
+        s.textContent = old.textContent;
+        old.replaceWith(s);
+      });
+    }
+
+    function openPage(pid) {
+      var url = prefix() + '/page/' + pid;
+      log('GET ' + url);
+      fetch(url).then(function (r) { return r.json(); }).then(function (page) {
+        var host = document.getElementById('page');
+        host.innerHTML = '';
+        (page.groups || []).forEach(function (group) {
+          (group.widgets || []).forEach(function (w) {
+            var cell = document.createElement('section');
+            cell.style.gridColumn = (w.x + 1) + ' / span ' + w.w;
+            host.appendChild(cell);
+            var wurl = prefix() + '/widget/' + w.id;
+            log('GET ' + wurl + '  (moduleid ' + w.moduleid + ')');
+            fetch(wurl).then(function (r) { return r.text(); }).then(function (html) { inject(cell, html); });
+          });
+        });
+      });
+    }
+
+    function loadMenu() {
+      document.documentElement.dir = document.getElementById('culture').value === 'fa' ? 'rtl' : 'ltr';
+      var url = prefix() + '/menu';
+      log('GET ' + url);
+      fetch(url).then(function (r) { return r.json(); }).then(function (menu) {
+        var nav = document.getElementById('menu');
+        nav.innerHTML = '';
+        (function walk(nodes) {
+          (nodes || []).forEach(function (n) {
+            var a = document.createElement('a');
+            a.textContent = n.title;
+            a.dataset.bcMid = n.mid;
+            if (n.pid) { a.dataset.bcPid = n.pid; a.onclick = function () { openPage(n.pid); }; }
+            else { a.className = 'group'; }
+            nav.appendChild(a);
+            walk(n.nodes);
+          });
+        })(menu.nodes);
+        var first = nav.querySelector('[data-bc-pid]');
+        if (first) { openPage(first.dataset.bcPid); }
+      });
+    }
+
+    document.getElementById('reload').onclick = loadMenu;
+    document.getElementById('culture').onchange = loadMenu;
+    loadMenu();
+  </script>
+</body>
+</html>

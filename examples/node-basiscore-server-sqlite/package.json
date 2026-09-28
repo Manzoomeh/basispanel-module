@@ -1,0 +1,18 @@
+{
+  "name": "basispanel-notes-module-node",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Notes — a BasisPanel module served by BasisCore.Server.Node with SQLite",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "check": "node tests/check-widgets.js",
+    "smoke": "node tests/smoke-test.js"
+  },
+  "dependencies": {
+    "basiscore.server": "git+https://github.com/Manzoomeh/BasisCore.Server.Node.git#55abd420090b2aa2ebe002302ccdf64340a1fbf6"
+  }
+}

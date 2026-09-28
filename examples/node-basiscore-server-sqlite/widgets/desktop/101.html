@@ -1,0 +1,126 @@
+<link rel="stylesheet" href="[##module.stylesheet##]"/>
+
+<div id="notesListWidget" class="notes-widget" dir="[##module.dir##]" lang="[##module.culture##]">
+  <h3 class="notes-widget__title">[##t.list.title##]</h3>
+  <form class="notes-form" data-role="form">
+    <input class="notes-input" name="title" maxlength="200" required placeholder="[##t.list.placeholder.title##]"/>
+    <textarea class="notes-input" name="body" maxlength="4000" rows="2" placeholder="[##t.list.placeholder.body##]"></textarea>
+    <button class="notes-button" type="submit">[##t.list.add##]</button>
+  </form>
+  <p class="notes-message" data-role="message" hidden></p>
+  <ul class="notes-list" data-role="list"><li class="notes-empty">[##t.list.loading##]</li></ul>
+</div>
+
+<script>
+  // R6 build marker
+  window.NOTES_LIST_BUILD = 'notes-node-sqlite 1.0.0';
+
+  // R4: no top-level const/let; the shell re-injects widgets on navigation.
+  // Stale-root guard: keep only the newest root.
+  (function () {
+    var roots = document.querySelectorAll('#notesListWidget');
+    for (var i = 0; i < roots.length - 1; i++) { try { roots[i].remove(); } catch (e) {} }
+  })();
+
+  (function () {
+    var roots = document.querySelectorAll('#notesListWidget');
+    var root = roots[roots.length - 1];
+    if (!root) { return; }
+
+    // R2: absolute URLs only. The service substitutes these tokens; nothing is hard-coded.
+    var api = '[##module.baseurl##]/[##cms.cms.rkey|cms.cookie.rkey##]/api/notes';
+    var text = {
+      empty: '[##t.list.empty##]',
+      remove: '[##t.list.delete##]',
+      confirm: '[##t.list.confirm##]',
+      session: '[##t.error.session##]',
+      generic: '[##t.error.generic##]'
+    };
+    var form = root.querySelector('[data-role="form"]');
+    var list = root.querySelector('[data-role="list"]');
+    var message = root.querySelector('[data-role="message"]');
+
+    function showMessage(value) {
+      message.textContent = value || '';
+      message.hidden = !value;
+    }
+
+    function request(method, url, body) {
+      return fetch(url, {
+        method: method,
+        headers: body ? { 'Content-Type': 'application/json' } : undefined,
+        body: body ? JSON.stringify(body) : undefined
+      }).then(function (response) {
+        if (response.status === 401) { throw new Error('session'); }
+        if (!response.ok) { throw new Error('generic'); }
+        return response.json();
+      });
+    }
+
+    function fail(error) {
+      showMessage(error && error.message === 'session' ? text.session : text.generic);
+    }
+
+    // Tell other widgets on the page that the data changed.
+    function announce(count) {
+      window.dispatchEvent(new CustomEvent('notes:changed', { detail: { count: count } }));
+      if (window.$bc && typeof window.$bc.setSource === 'function') {
+        window.$bc.setSource('notes.changed', { count: count });
+      }
+    }
+
+    function render(notes) {
+      list.innerHTML = '';
+      if (!notes.length) {
+        var empty = document.createElement('li');
+        empty.className = 'notes-empty';
+        empty.textContent = text.empty;
+        list.appendChild(empty);
+        return;
+      }
+      notes.forEach(function (note) {
+        var item = document.createElement('li');
+        item.className = 'notes-item';
+        var title = document.createElement('strong');
+        title.textContent = note.title;
+        var body = document.createElement('p');
+        body.textContent = note.body;
+        var meta = document.createElement('time');
+        meta.dateTime = note.created_at;
+        meta.textContent = new Date(note.created_at).toLocaleString('[##module.culture##]');
+        var remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'notes-button notes-button--quiet';
+        remove.textContent = text.remove;
+        remove.addEventListener('click', function () {
+          if (!window.confirm(text.confirm)) { return; }
+          request('DELETE', api + '/' + note.id).then(load).catch(fail);
+        });
+        item.appendChild(title);
+        if (note.body) { item.appendChild(body); }
+        item.appendChild(meta);
+        item.appendChild(remove);
+        list.appendChild(item);
+      });
+    }
+
+    function load() {
+      return request('GET', api).then(function (data) {
+        showMessage('');
+        render(data.notes || []);
+        announce(data.count || 0);
+      }).catch(fail);
+    }
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      var payload = { title: form.title.value, body: form.body.value };
+      request('POST', api, payload).then(function () {
+        form.reset();
+        return load();
+      }).catch(fail);
+    });
+
+    load();
+  })();
+</script>

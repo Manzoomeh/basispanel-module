@@ -9,6 +9,7 @@ the seven widget rules — so they can be compared side by side.
 | # | Folder | Technology | Database | What it shows | Status |
 |---|---|---|---|---|---|
 | 1 | [edge-basiscore-sqlite](edge-basiscore-sqlite/) | Python · [BasisCore.Server.Edge](https://github.com/Manzoomeh/BasisCore.Server.Edge) (`bclib` 4.0) | SQLite | Notes app: menu, 2 pages, 3 widgets, sidebar, CRUD API, English + Persian | Tested locally |
+| 2 | [node-basiscore-server-sqlite](node-basiscore-server-sqlite/) | Node.js · [BasisCore.Server.Node](https://github.com/Manzoomeh/BasisCore.Server.Node) (`basiscore.server` 2.0) | SQLite (`node:sqlite`) | Same Notes app; module contract as the server's routing connection; one widget rendered on the server by the BasisCore engine (`dbsource` + `print`) | Tested locally |
 
 More technologies will be added here.
 
@@ -19,7 +20,7 @@ examples/<technology>-<database>/
 ├── README.md             quick start, routes, how the contract is met
 ├── menu/<device>/menu.json
 ├── pages/<device>/<pid>.json
-├── widgets/<device>/<widgetID>.html
+├── widgets/<device>/<widgetID>.html   (or .il.json — BasisCore IL, example 2)
 ├── sidebars/<device>/<pid>.json     (optional)
 ├── assets/
 ├── i18n/                 labels per culture
