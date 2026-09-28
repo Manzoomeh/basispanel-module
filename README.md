@@ -3,6 +3,9 @@
 > **Status: Phase 1 — test repository.** This README describes what a BasisPanel module is,
 > everything the platform already gives a module for free, and the full technical surface a
 > module works with. No code has been added yet; this repository is the starting point.
+>
+> **Building a module with an AI agent?** Give it [AGENTS.md](AGENTS.md) — the exact files, JSON
+> formats, authentication, access control and independence rules a module must follow.
 
 ---
 
