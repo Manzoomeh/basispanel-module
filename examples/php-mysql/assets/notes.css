@@ -1,0 +1,73 @@
+/*
+ * Demo stylesheet for the Notes module.
+ * In a real installation these rules belong in the platform's SHARED stylesheet, scoped to the
+ * widget root ids (widget rule R1), and NOTES_STYLESHEET_URL points at that stylesheet.
+ * Logical properties (inline-start/end) keep the layout correct in RTL and LTR.
+ */
+#notesListWidget, #notesSummaryWidget, #notesAboutWidget {
+  --notes-fg: #1f2933;
+  --notes-muted: #616e7c;
+  --notes-line: #d9dee4;
+  --notes-surface: #ffffff;
+  --notes-accent: #1f6feb;
+  font: 14px/1.6 system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+  color: var(--notes-fg);
+  background: var(--notes-surface);
+  border: 1px solid var(--notes-line);
+  border-radius: 8px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  #notesListWidget, #notesSummaryWidget, #notesAboutWidget {
+    --notes-fg: #e4e7eb;
+    --notes-muted: #9aa5b1;
+    --notes-line: #3e4c59;
+    --notes-surface: #1f2933;
+    --notes-accent: #58a6ff;
+  }
+}
+
+#notesListWidget .notes-widget__title,
+#notesSummaryWidget .notes-widget__title,
+#notesAboutWidget .notes-widget__title { margin: 0 0 12px; font-size: 16px; }
+
+#notesListWidget .notes-form { display: grid; gap: 8px; margin-block-end: 12px; }
+
+#notesListWidget .notes-input {
+  font: inherit; color: inherit; background: transparent;
+  border: 1px solid var(--notes-line); border-radius: 6px; padding: 6px 10px;
+}
+
+#notesListWidget .notes-button {
+  justify-self: start; font: inherit; cursor: pointer;
+  color: #fff; background: var(--notes-accent);
+  border: 0; border-radius: 6px; padding: 6px 14px;
+}
+
+#notesListWidget .notes-button--quiet {
+  color: var(--notes-muted); background: transparent;
+  border: 1px solid var(--notes-line); padding: 2px 10px;
+}
+
+#notesListWidget .notes-message { color: #c62828; margin: 0 0 8px; }
+
+#notesListWidget .notes-list { list-style: none; margin: 0; padding: 0; }
+
+#notesListWidget .notes-item {
+  display: grid; gap: 4px; padding-block: 10px;
+  border-block-start: 1px solid var(--notes-line);
+}
+
+#notesListWidget .notes-item p { margin: 0; white-space: pre-wrap; }
+#notesListWidget .notes-item time { color: var(--notes-muted); font-size: 12px; }
+#notesListWidget .notes-item .notes-button { justify-self: end; }
+#notesListWidget .notes-empty { color: var(--notes-muted); padding-block: 8px; }
+
+#notesSummaryWidget .notes-summary,
+#notesAboutWidget .notes-summary { margin: 0; display: grid; gap: 4px; }
+
+#notesSummaryWidget dt, #notesAboutWidget dt { color: var(--notes-muted); font-size: 12px; }
+#notesSummaryWidget dd, #notesAboutWidget dd { margin: 0 0 8px; font-size: 18px; font-weight: 600; }
+#notesAboutWidget a { color: var(--notes-accent); }

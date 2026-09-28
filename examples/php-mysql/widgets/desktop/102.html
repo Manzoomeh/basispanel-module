@@ -1,0 +1,55 @@
+<link rel="stylesheet" href="[##module.stylesheet##]"/>
+
+<div id="notesSummaryWidget" class="notes-widget" dir="[##module.dir##]" lang="[##module.culture##]">
+  <h3 class="notes-widget__title">[##t.summary.title##]</h3>
+  <dl class="notes-summary">
+    <dt>[##t.summary.count##]</dt>
+    <dd data-role="count">[##t.summary.none##]</dd>
+    <dt>[##t.summary.latest##]</dt>
+    <dd data-role="latest">[##t.summary.none##]</dd>
+  </dl>
+</div>
+
+<script>
+  window.NOTES_SUMMARY_BUILD = 'notes-php-mysql 1.0.0';
+
+  (function () {
+    var roots = document.querySelectorAll('#notesSummaryWidget');
+    for (var i = 0; i < roots.length - 1; i++) { try { roots[i].remove(); } catch (e) {} }
+  })();
+
+  (function () {
+    var roots = document.querySelectorAll('#notesSummaryWidget');
+    var root = roots[roots.length - 1];
+    if (!root) { return; }
+
+    var api = '[##module.baseurl##]/[##cms.cms.rkey|cms.cookie.rkey##]/api/notes';
+    var none = '[##t.summary.none##]';
+    var count = root.querySelector('[data-role="count"]');
+    var latest = root.querySelector('[data-role="latest"]');
+
+    function refresh() {
+      if (!document.body.contains(root)) { return; }
+      fetch(api).then(function (response) {
+        if (!response.ok) { throw new Error(String(response.status)); }
+        return response.json();
+      }).then(function (data) {
+        var notes = data.notes || [];
+        count.textContent = String(data.count || 0);
+        latest.textContent = notes.length ? notes[0].title : none;
+      }).catch(function () {
+        count.textContent = none;
+        latest.textContent = none;
+      });
+    }
+
+    // Replace the listener of a previous injection instead of stacking a new one.
+    if (window.__notesSummaryListener) {
+      window.removeEventListener('notes:changed', window.__notesSummaryListener);
+    }
+    window.__notesSummaryListener = refresh;
+    window.addEventListener('notes:changed', refresh);
+
+    refresh();
+  })();
+</script>

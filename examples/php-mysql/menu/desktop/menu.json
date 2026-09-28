@@ -1,0 +1,13 @@
+{
+  "nodes": [
+    {
+      "title": "[##t.menu.group##]",
+      "image": "asset/notes-icon.svg",
+      "mid": "[##mid##]",
+      "nodes": [
+        { "title": "[##t.menu.notes##]", "mid": "[##mid##]", "pid": 1 },
+        { "title": "[##t.menu.about##]", "mid": "[##mid##]", "pid": 2 }
+      ]
+    }
+  ]
+}

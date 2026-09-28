@@ -1,0 +1,6 @@
+{
+  "nodes": [
+    { "title": "[##t.menu.notes##]", "mid": "[##mid##]", "pid": 1 },
+    { "title": "[##t.menu.about##]", "mid": "[##mid##]", "pid": 2 }
+  ]
+}

@@ -1,0 +1,35 @@
+# Local development: PHP 8.3 + Apache, and MySQL 8.4.
+#   cp .env.sample .env && docker compose up --build
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${NOTES_DB_NAME:-notes}
+      MYSQL_USER: ${NOTES_DB_USER:-notes}
+      MYSQL_PASSWORD: ${NOTES_DB_PASSWORD:?set NOTES_DB_PASSWORD in .env}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d:ro
+      - notes-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 5s
+      retries: 30
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    env_file: .env
+    environment:
+      NOTES_DB_HOST: db
+    ports:
+      - "8794:80"
+    volumes:
+      - .:/var/www/module
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  notes-data:
