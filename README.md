@@ -2,7 +2,7 @@
 
 > **Status: Phase 1 — test repository.** This README describes what a BasisPanel module is,
 > everything the platform already gives a module for free, and the full technical surface a
-> module works with. No code has been added yet; this repository is the starting point.
+> module works with. Working examples live in [examples/](examples/README.md), one per technology.
 >
 > **Building a module with an AI agent?** Give it [AGENTS.md](AGENTS.md) — the exact files, JSON
 > formats, authentication, access control and independence rules a module must follow.
@@ -17,7 +17,7 @@
 4. [Connecting to the rest of the ecosystem](#4-connecting-to-the-rest-of-the-ecosystem)
 5. [Building modules with AI](#5-building-modules-with-ai)
 6. [Technical reference — the full capability list](#6-technical-reference--the-full-capability-list)
-7. [Phase 1 plan for this repository](#7-phase-1-plan-for-this-repository)
+7. [Phase 1 plan for this repository](#7-phase-1-plan-for-this-repository) — see also [Examples](examples/README.md)
 8. [Honest limits](#8-honest-limits)
 9. [Glossary](#9-glossary)
 
@@ -399,10 +399,10 @@ to stay in that range.
 | Step | Deliverable | Status |
 |---|---|---|
 | 1 | This README — scope and capability list | Done |
-| 2 | Module skeleton: service file, the six routes, four content folders | To do |
-| 3 | One menu entry, one page, one widget that shows the current user and tenant | To do |
-| 4 | Rule checker for the seven widget rules | To do |
-| 5 | Local run without the platform (mock session) | To do |
+| 2 | Module skeleton: service file, the six routes, four content folders | Done — [example 1](examples/edge-basiscore-sqlite/) |
+| 3 | Menu, pages and widgets that show data of the current tenant | Done — Notes module, SQLite |
+| 4 | Rule checker for the seven widget rules | Done — `tests/check_widgets.py` |
+| 5 | Local run without the platform (mock session + shell simulator) | Done — `/dev/shell` |
 | 6 | Registration request for one test tenant (module id, prefix, address) | To do — needs platform owner |
 | 7 | CI deployment and verification checklist | To do |
 

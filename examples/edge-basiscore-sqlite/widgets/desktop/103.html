@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="[##module.stylesheet##]"/>
+
+<div id="notesAboutWidget" class="notes-widget" dir="[##module.dir##]" lang="[##module.culture##]">
+  <h3 class="notes-widget__title">[##t.about.title##]</h3>
+  <p>[##t.about.text##]</p>
+  <h4>[##t.about.scope##]</h4>
+  <dl class="notes-summary">
+    <dt>[##t.about.business##]</dt>
+    <dd><bdi>[##cms.cms.dmnid##]</bdi></dd>
+    <dt>[##t.about.culture##]</dt>
+    <dd><bdi>[##module.culture##]</bdi></dd>
+    <dt>[##t.about.build##]</dt>
+    <dd><bdi data-role="build"></bdi></dd>
+  </dl>
+  <p>
+    [##t.about.repo##]:
+    <a href="https://github.com/Manzoomeh/basispanel-module" target="_blank" rel="noopener"><bdi>github.com/Manzoomeh/basispanel-module</bdi></a>
+  </p>
+</div>
+
+<script>
+  window.NOTES_ABOUT_BUILD = 'notes-edge-sqlite 1.0.0';
+
+  (function () {
+    var roots = document.querySelectorAll('#notesAboutWidget');
+    for (var i = 0; i < roots.length - 1; i++) { try { roots[i].remove(); } catch (e) {} }
+    var root = roots[roots.length - 1];
+    if (root) { root.querySelector('[data-role="build"]').textContent = window.NOTES_ABOUT_BUILD; }
+  })();
+</script>

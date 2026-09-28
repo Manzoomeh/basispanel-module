@@ -1,0 +1,23 @@
+{
+  "container": "container",
+  "title": "[##t.page.about##]",
+  "customizable": true,
+  "groups": [
+    {
+      "groupname": "notes_about",
+      "options": {},
+      "widgets": [
+        {
+          "id": 103,
+          "title": null,
+          "name": "",
+          "moduleid": "[##mid##]",
+          "isPrimary": true,
+          "x": 0, "y": 0, "w": 12, "h": 12,
+          "container": "fullPageWidget",
+          "widgetName": "Notes_About"
+        }
+      ]
+    }
+  ]
+}

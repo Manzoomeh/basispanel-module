@@ -1,0 +1,32 @@
+# Examples
+
+Working BasisPanel modules, one folder per technology. Every example implements the **same
+contract** from [AGENTS.md](../AGENTS.md) — the six routes, session validation, tenant scoping and
+the seven widget rules — so they can be compared side by side.
+
+## Index
+
+| # | Folder | Technology | Database | What it shows | Status |
+|---|---|---|---|---|---|
+| 1 | [edge-basiscore-sqlite](edge-basiscore-sqlite/) | Python · [BasisCore.Server.Edge](https://github.com/Manzoomeh/BasisCore.Server.Edge) (`bclib` 4.0) | SQLite | Notes app: menu, 2 pages, 3 widgets, sidebar, CRUD API, English + Persian | Tested locally |
+
+More technologies will be added here.
+
+## Folder convention
+
+```
+examples/<technology>-<database>/
+├── README.md             quick start, routes, how the contract is met
+├── menu/<device>/menu.json
+├── pages/<device>/<pid>.json
+├── widgets/<device>/<widgetID>.html
+├── sidebars/<device>/<pid>.json     (optional)
+├── assets/
+├── i18n/                 labels per culture
+├── dev/                  local shell simulator
+├── tests/                rule checker and smoke test
+└── .env.sample
+```
+
+The content folders (`menu`, `pages`, `widgets`, `sidebars`) are part of the contract and keep the
+same shape in every technology; only the service code differs.

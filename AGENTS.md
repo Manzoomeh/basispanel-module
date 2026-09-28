@@ -81,6 +81,8 @@ API. Produce exactly this:
   A missing device folder answers 404 — there is no fallback. Plan for `tablet/` as well.
 - Live URLs may carry the device capitalised (`Desktop`). Match the device segment
   case-insensitively.
+- Working examples, one per technology, are in [examples/](examples/README.md). Start from the
+  closest one.
 - The reference implementation is a Python edge service on the `bclib` package. Any stack is
   acceptable **if** it reproduces the routes, response shapes and behaviour below exactly.
 

@@ -1,0 +1,2 @@
+# BasisCore.Server.Edge (bclib) 4.0.0, pinned to the commit this example was tested with.
+bclib @ git+https://github.com/Manzoomeh/BasisCore.Server.Edge.git@db719f2808406b8f81464f7e278f79277d989f04
